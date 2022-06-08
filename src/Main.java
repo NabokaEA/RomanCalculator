@@ -19,10 +19,20 @@ public class Main {
 
     //Метод принимает строку с арифметическим выражением между двумя числами и возвращет строку с результатом их выполнения.
     public static String calc(String input) {
+        //Получим массив строковых операторов:
         String[] opArray=inputStringToArray(input);
+        //Проверка количества операций на неравенство 2:
         if (opArray.length!=2){
             throw new RuntimeException("Математическая операция не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
         }
+        //Проверим операнды на принадлежность к римской или арабской системе:
+        if (isRoman(opArray[0])&isRoman(opArray[1])){
+            System.out.println("Римские");
+        } else if (!isRoman(opArray[0])&!isRoman(opArray[1])) {
+            System.out.println("Арабские");
+        } else {throw new RuntimeException("используются одновременно разные системы счисления");}
+
+
         return "ОК";
     }
 // Метод преобразует строку в строковый массив, состоящий из операторов
@@ -46,6 +56,14 @@ public class Main {
         } else{
             throw new RuntimeException("Строка не является математической операцией");
         }
-
     }
+    // Метод определения системы, к которой относится сначение операнда
+    private static boolean isRoman (String operator){
+            for (RomanDigits digit : RomanDigits.values()) {
+                if (digit.name().equals(operator)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 }
