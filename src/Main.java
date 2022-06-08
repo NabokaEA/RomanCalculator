@@ -8,13 +8,14 @@ public class Main {
     static String inputString; // строка ввода пользовательского выражения
 
     public static void main(String[] args) {
-
-        // Читаем с консоли введееные данные
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите арифметическое выражение типа a+(-*/)b=с арабскими, либо с римскими числами до 10:");
-        inputString = scanner.next();
-        System.out.printf("Введена строка: %s ", inputString);
-        calc(inputString);
+        for (int i = 0; i < 10; i++) {
+            // Читаем с консоли введееные данные
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Введите арифметическое выражение типа a+(-*/)b=с арабскими, либо с римскими числами до 10:");
+            inputString = scanner.next();
+            System.out.printf("Введена строка: %s ", inputString);
+            calc(inputString);
+        }
     }
 
     //Метод принимает строку с арифметическим выражением между двумя числами и возвращет строку с результатом их выполнения.
@@ -35,9 +36,10 @@ public class Main {
             }
             byteResult=bytesCalculations(opArrayBytes);
             //Проверка результа на отрицательное значение для римских цифр
-            if (byteResult<0){
-                throw new RuntimeException("Римские числа не могут быть отрицательными");}
-            System.out.println(byteResult);
+            if (byteResult<1){
+                throw new RuntimeException("Римские числа не могут быть меньше 1");}
+            stringResult=romanBytesToArabString(byteResult);
+            System.out.println(stringResult);
         } else if (!isRoman(opArrayStrings[0]) & !isRoman(opArrayStrings[1])) {
             System.out.println("Арабские");
             //Арабские переобразуем в массив байт для вычислений парсингом
@@ -96,7 +98,7 @@ public class Main {
     private static byte romanStringToArabBytes(String romanDigit) {
         for (RomanDigits digit : RomanDigits.values()) {
             if (digit.name().equals(romanDigit)) {
-                int tmp = digit.ordinal();
+                int tmp = digit.ordinal()+1;
                 if (tmp > 10) {
                     throw new RuntimeException("Значение больше 10");
                 }
@@ -113,5 +115,7 @@ public class Main {
         }
         return (byte) tmp;
     }
-
+    private static String romanBytesToArabString(byte romanDigit) {
+                return String.valueOf(RomanDigits.values()[romanDigit-1]);
+            }
 }
