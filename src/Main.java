@@ -33,14 +33,14 @@ public class Main {
             System.out.println("Римские");
             //Римские переобразуем в массив байт для вычислений с помощью метода
             for (int i = 0; i < 2; i++) {
-                opArrayBytes[i] = romanStringToArabByts(opArrayStrings[i]);
+                opArrayBytes[i] = romanStringToArabBytes(opArrayStrings[i]);
                 System.out.println(opArrayBytes[i]);
             }
         } else if (!isRoman(opArrayStrings[0]) & !isRoman(opArrayStrings[1])) {
             System.out.println("Арабские");
             //Арабские переобразуем в массив байт для вычислений парсингом
             for (int i = 0; i < 2; i++) {
-                opArrayBytes[i] = arabStringToArabByts(opArrayStrings[i]);
+                opArrayBytes[i] = arabStringToArabBytes(opArrayStrings[i]);
                 System.out.println(opArrayBytes[i]);
             }
         } else {
@@ -84,16 +84,24 @@ public class Main {
         return false;
     }
 
-    private static byte romanStringToArabByts(String romanDigit) {
+    private static byte romanStringToArabBytes(String romanDigit) {
         for (RomanDigits digit : RomanDigits.values()) {
             if (digit.name().equals(romanDigit)) {
-                return (byte) digit.ordinal();
+                int tmp = digit.ordinal();
+                if (tmp > 10) {
+                    throw new RuntimeException("Значение больше 10");
+                }
+                return (byte) tmp;
             }
         }
         return 127;
     }
 
-    private static byte arabStringToArabByts(String arabDigit) {
-        return parseByte(arabDigit);
+    private static byte arabStringToArabBytes(String arabDigit) {
+        int tmp = parseByte(arabDigit);
+        if (tmp > 10) {
+            throw new RuntimeException("Значение больше 10");
+        }
+        return (byte) tmp;
     }
 }
