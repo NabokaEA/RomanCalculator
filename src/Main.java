@@ -3,11 +3,9 @@ import java.util.Scanner;
 import static java.lang.Byte.parseByte;
 
 public class Main {
-    static String result; //результат
+    static String stringResult; //строковый результат
+    static byte byteResult; //числовой результат
     static String inputString; // строка ввода пользовательского выражения
-    //Блок инициализации переменных result=a+-*/b
-    byte a = 0; //первый операнд
-    byte b = 0; //второй операнд
 
     public static void main(String[] args) {
 
@@ -34,41 +32,52 @@ public class Main {
             //Римские переобразуем в массив байт для вычислений с помощью метода
             for (int i = 0; i < 2; i++) {
                 opArrayBytes[i] = romanStringToArabBytes(opArrayStrings[i]);
-                System.out.println(opArrayBytes[i]);
             }
+            byteResult=bytesCalculations(opArrayBytes);
+            //Проверка результа на отрицательное значение для римских цифр
+            if (byteResult<0){
+                throw new RuntimeException("Римские числа не могут быть отрицательными");}
+            System.out.println(byteResult);
         } else if (!isRoman(opArrayStrings[0]) & !isRoman(opArrayStrings[1])) {
             System.out.println("Арабские");
             //Арабские переобразуем в массив байт для вычислений парсингом
             for (int i = 0; i < 2; i++) {
                 opArrayBytes[i] = arabStringToArabBytes(opArrayStrings[i]);
-                System.out.println(opArrayBytes[i]);
             }
+            byteResult= bytesCalculations(opArrayBytes);
+            System.out.println(byteResult);
         } else {
             throw new RuntimeException("используются одновременно разные системы счисления");
         }
+// Вычисления
 
 
-        return "ОК";
+        return stringResult;
+    }
+
+    private static byte bytesCalculations(byte[] opArrayBytes) {
+        if (inputString.contains("+")) {
+            byteResult=(byte)(opArrayBytes[0]+ opArrayBytes[1]);
+        } else if (inputString.contains("-")) {
+            byteResult=(byte)(opArrayBytes[0]- opArrayBytes[1]);
+        } else if (inputString.contains("/")) {
+            byteResult=(byte)(opArrayBytes[0]/ opArrayBytes[1]);
+        } else if (inputString.contains("*")) {
+            byteResult = (byte) (opArrayBytes[0] * opArrayBytes[1]);
+        }
+        return byteResult;
     }
 
     // Метод преобразует строку в строковый массив, состоящий из операторов
     private static String[] inputStringToArray(String input2) {
         if (inputString.contains("+")) {
-            String[] inputAsArray = inputString.split("[+]");
-            Operation operation = Operation.ADD;
-            return inputAsArray;
+            return inputString.split("[+]");
         } else if (inputString.contains("-")) {
-            String[] inputAsArray = inputString.split("[-]");
-            Operation operation = Operation.SUB;
-            return inputAsArray;
+            return inputString.split("[-]");
         } else if (inputString.contains("/")) {
-            String[] inputAsArray = inputString.split("[/]");
-            Operation operation = Operation.DIV;
-            return inputAsArray;
+            return inputString.split("[/]");
         } else if (inputString.contains("*")) {
-            String[] inputAsArray = inputString.split("[*]");
-            Operation operation = Operation.MUL;
-            return inputAsArray;
+            return inputString.split("[*]");
         } else {
             throw new RuntimeException("Строка не является математической операцией");
         }
@@ -104,4 +113,5 @@ public class Main {
         }
         return (byte) tmp;
     }
+
 }
